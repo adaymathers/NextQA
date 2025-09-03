@@ -1,0 +1,5 @@
+export const clients = [{ id: 'c1', name: 'Cliente A' }, { id: 'c2', name: 'Cliente B' }]
+export const projects = [{ id:'p1', clientId:'c1', name:'Proyecto 1' }]
+export const lines = [{ id:'l1', name:'Linea 1' }]
+export const products = [{ id:'prod1', projectId:'p1', name:'Producto 1001' }]
+export const checklists = [{ id:'ch1', productId:'prod1', items:[{ id:'i1', num:1, type:'visual', severity:'low', team:'Equipo A', label:'Revisar superficie' }, { id:'i2', num:2, type:'dimensional', subtype:'longitudinal', dimension:'10.0 ±0.2', severity:'high', team:'Equipo B', label:'Longitud medida' }] }]

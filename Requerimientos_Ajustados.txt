@@ -1,0 +1,66 @@
+Ajuste de Requerimientos para el Software de Control de Calidad
+
+Resumen General:
+Aplicación multiusuario para el departamento de control de calidad de una empresa (~500 empleados, equipo QA < 20 personas).
+
+Flujo principal:
+1. El administrativo crea un nuevo cliente.
+2. A cada cliente se le asocian uno o más proyectos.
+3. Cada proyecto contiene diferentes productos.
+4. Por cada producto, se crean checklist de inspección.
+5. Los inspectores, desde tabletas en la línea de montaje, seleccionan y rellenan los checklist, generando un reporte PDF.
+6. El reporte PDF y los datos de inspección se guardan en una base de datos para métricas y consulta posterior.
+7. Si se detecta un defecto grave, el sistema envía automáticamente un correo electrónico a una lista editable de destinatarios.
+
+Pantallas y funcionalidades necesarias:
+0. Panel Admin/Debug: gestión de usuarios (crear, modificar, eliminar, asignar permisos).
+1. Login: acceso con usuario y contraseña.
+2. Equipos: gestión de listas de correos por equipos de trabajo.
+3. Administrativo: alta de cliente.
+4. Administrativo: alta de proyecto y vinculación con cliente.
+4. Administrativo: alta de linea de produccion / proceso
+5. Administrativo: Gestion de producto.
+   - Seccion para dar de alta, modificar y eliminar productos
+    -Panel de edicion - Pagina separada
+      - Subida de plano de fabricación (PNG/JPEG, 1980x1080 px) y visualización en canvas.
+      - Tabla de criterios a evaluar (creación de puntos de inspección).
+      - Para cada punto de inspección:
+      - Asignación automática de número.
+      - Panel izquierdo como tabla de excel o array
+      - Panel derecho, visor de plano.
+      - Selección de tipo: visual o dimensional (combobox).
+      - Si es dimensional: especificar si es longitudinal o angular, y la dimensión requerida.
+      - Si es visual: check de aprobado y comentarios del inspector.
+      - Se debe asignar un nivel de gravedad y un equipo responsable, en caso de que en la inspeccion falle el punto, se notificara a este equipo, seleccionable desde la API de Equipos.
+      - El administrador debe poder enfocar el visor del plano con Zoom de hasta 800% y scroll horizontal y vertical (zoom automático) en el punto de inspección (viewport); este dato se guarda para que el inspector vea el zoom adecuado al inspeccionar.
+6.- Inspector operativo: El inspector debera poder iniciar sesion, seleccionar
+ un proceso, y un numero de producto. Al darle a iniciar inspeccion, se abrira
+  el canvas con el plano a la derecha y la tabla a la izquierda, el inspector
+   ira seleccionando fila por fila los puntos de inspeccion. Al seleccionar
+    cada punto, el zoom en el canvas se ajustara automáticamente para ver el 
+    punto de inspeccion en el plano. El inspector rellenara el formulario fila
+     por fila, si el punto de inspeccion es dimensional, le dira si esta 
+     dentro del rango aceptable la medicion. Si no lo esta, se notificara 
+     a los equipo correspondientes automaticamente al cerrar el reporte, de cada uno de los defectos resultantes.
+     Los resultados de la inspeccion se guardaran en una base de datos, incluyendo un PDF que incluya todos los datos.
+     Esto con el fin de generar metricas KPI.
+7.- Panel Gerencial / Administrativo
+    -Vista general de los procesos activos, de acuerdo a los usuarios conectados
+    -Acceso a los reportes generados historicamente
+    -Graficas de control estadistico de procesos
+    -Graficas de cantidad de defectos
+    -Seccion de alertas criticas
+8.- Chat global - Esto con la intencion de evitar usar WhatsApp en el trabajo     
+
+
+
+Requerimientos técnicos:
+- Priorizar funcionalidad completa y usabilidad.
+- Tecnologías: HTML, CSS, JavaScript, React, Node.js, base de datos a elegir (según conveniencia y escalabilidad).
+- Electron solo si se requiere versión de escritorio.
+- El sistema debe ser fácil de usar y administrar, considerando que el usuario principal es un project manager, no un programador experto.
+
+Notas adicionales:
+- Los correos automáticos deben poder configurarse y editarse desde un formulario.
+- Los reportes PDF deben ser accesibles para consulta y descarga.
+- El sistema debe permitir métricas y análisis posteriores sobre los datos de inspección.

@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(cuid())
+  email       String       @unique
+  name        String?
+  password    String
+  role        String // Rol del usuario (admin, inspector, etc)
+  xPct        Float?
+  yPct        Float?
+  createdAt   DateTime     @default(now()) // Fecha de creación
+  updatedAt   DateTime?    @updatedAt // Fecha de última actualización (opcional)
+  // Inspecciones donde el usuario es inspector
+  inspections Inspection[]
+}
+
+model Inspection {
+  id          String             @id @default(cuid())
+  checklistId String
+  checklist   Checklist          @relation(fields: [checklistId], references: [id])
+  inspectorId String
+  inspector   User               @relation(fields: [inspectorId], references: [id])
+  lineId      String?
+  line        ProductionLine?    @relation("ProductionLineToInspection", fields: [lineId], references: [id])
+  projectId   String?
+  project     Project?           @relation(fields: [projectId], references: [id])
+  productId   String?
+  product     Product?           @relation(fields: [productId], references: [id])
+  results     InspectionResult[]
+  notes       String?
+  createdAt   DateTime           @default(now())
+}
+
+model InspectionResult {
+  id               String        @id @default(cuid())
+  inspectionId     String
+  inspection       Inspection    @relation(fields: [inspectionId], references: [id])
+  checklistItemId  String
+  checklistItem    ChecklistItem @relation(fields: [checklistItemId], references: [id])
+  status           String
+  comment          String?
+  photoUrl         String?
+  severityObserved String?
+  valorReal        String?
+  diferencia       String?
+}
+
+model Product {
+  id         String          @id @default(cuid())
+  projectId  String
+  lineId     String?
+  name       String
+  project    Project         @relation(fields: [projectId], references: [id])
+  line       ProductionLine? @relation(fields: [lineId], references: [id])
+  checklists Checklist[]
+  createdAt  DateTime        @default(now()) //
+  inspections Inspection[] // Relación inversa
+}
+
+model Upload {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  url       String
+  mime      String
+  size      Int
+  createdAt DateTime @default(now())
+}
+
+// Modelo de Proyecto
+model Project {
+  id        String    @id @default(cuid())
+  clientId  String
+  name      String
+  createdAt DateTime  @default(now())
+  client    Client    @relation(fields: [clientId], references: [id])
+  inspections Inspection[] // Relación inversa
+  products  Product[]
+}
+
+// Modelo de Línea de Producción
+model ProductionLine {
+  id          String       @id @default(cuid())
+  name        String
+  image       String?
+  description String?
+  products    Product[]
+  inspections Inspection[] @relation("ProductionLineToInspection") // <-- Agrega esto
+}
+
+// Modelo de Checklist
+model Checklist {
+  id          String          @id @default(cuid())
+  productId   String
+  imageUrl    String?
+  createdBy   String?
+  createdAt   DateTime        @default(now())
+  product     Product         @relation(fields: [productId], references: [id])
+  items       ChecklistItem[]
+  // Inspecciones asociadas a este checklist
+  inspections Inspection[]
+}
+
+// Modelo de Item de Checklist
+model ChecklistItem {
+  id                String             @id @default(cuid())
+  checklistId       String
+  num               Int
+  label             String
+  type              String?
+  subtype           String?
+  severity          String?
+  team              String?
+  xPct              Float?
+  yPct              Float?
+  valor             String?
+  unidad            String?
+  tolerancia        String?
+  zoom              Int? // Porcentaje de zoom del visor
+  dimensionType     String? // Tipo de dimensión
+  checklist         Checklist          @relation(fields: [checklistId], references: [id])
+  inspectionResults InspectionResult[]
+}
+
+model Team {
+  id     String   @id @default(cuid())
+  name   String
+  emails String[]
+}
+
+model Client {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  projects  Project[]
+}

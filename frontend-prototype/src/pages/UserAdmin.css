@@ -1,0 +1,59 @@
+.user-admin-page {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #232136;
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  padding: 32px;
+}
+.user-admin-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.user-admin-form input, .user-admin-form select {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+}
+.user-admin-form button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(90deg, #7f53ac 0%, #f797a7 100%);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+.user-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #2a273f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.user-admin-table th, .user-admin-table td {
+  padding: 10px;
+  text-align: left;
+}
+.user-admin-table th {
+  background: #232136;
+}
+.user-admin-table tr:nth-child(even) {
+  background: #28243c;
+}
+.user-admin-table button {
+  margin-right: 8px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  background: #5b9ffb;
+  color: #fff;
+  cursor: pointer;
+}
+.user-admin-msg {
+  margin-bottom: 16px;
+  color: #ff6b6b;
+}
