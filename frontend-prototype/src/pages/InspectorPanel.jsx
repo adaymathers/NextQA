@@ -192,131 +192,139 @@ const InspectorPanel = ({ userEmail }) => {
 
 	// Render principal
 	return (
-		<div className="inspector-panel-root">
+		<div className="inspector-panel-root matrix-bg min-h-screen flex flex-col text-xs">
 			{pdfUrl && (
-				<div style={{ background: '#EAB308', padding: '1rem', marginBottom: '1rem', textAlign: 'center', borderRadius: 8 }}>
+				<div className="bg-matrix-yellow p-4 mb-4 text-center rounded-lg">
 					<b>Reporte PDF generado:</b> <a href={pdfUrl} target="_blank" rel="noopener noreferrer">Descargar/Ver PDF</a>
 				</div>
 			)}
-			{/* Encabezado superior */}
-			<div className="inspector-header">
-						<div className="header-left">
-										<div className="header-field">
-											<label>Inspector:</label>
-											<span>{userEmail || '...'}</span>
-										</div>
-							<div className="header-field">
-								<label>Línea:</label>
-								<select value={selectedLine} onChange={e => setSelectedLine(e.target.value)}>
-									<option value="">Seleccionar</option>
-									{lines.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
-								</select>
-							</div>
-							<div className="header-field">
-								<label>Proyecto:</label>
-								<select value={selectedProject} onChange={e => setSelectedProject(e.target.value)}>
-									<option value="">Seleccionar</option>
-									{projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-								</select>
-							</div>
-							<div className="header-field">
-								<label>Producto:</label>
-								<select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)} disabled={!selectedProject}>
-									<option value="">Seleccionar</option>
-									{products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-								</select>
-							</div>
-						</div>
-						<div className="header-right">
-							<span className="header-time">{currentTime.toLocaleString()}</span>
-							<button className="btn-yellow" onClick={handleLoadChecklist} disabled={!selectedProduct || loadingChecklist}>
-								{loadingChecklist ? 'Cargando...' : 'Cargar Checklist'}
-							</button>
-							<button className="btn-yellow" onClick={handleSaveInspection} disabled={saving || !checklist || inspectionResults.length === 0} style={{ marginLeft: '1rem' }}>
-								{saving ? 'Guardando...' : 'Registrar Inspección'}
-							</button>
-						</div>
+			{/* Encabezado sticky arriba */}
+			<div className="inspector-header product-create-sticky">
+				<div className="flex flex-wrap gap-4 items-center">
+					<div className="flex flex-col">
+						<label className="font-bold text-matrix-green">Inspector:</label>
+						<span className="text-matrix-green">{userEmail || '...'}</span>
+					</div>
+					<div className="flex flex-col">
+						<label className="font-bold text-matrix-green">Línea:</label>
+						<select value={selectedLine} onChange={e => setSelectedLine(e.target.value)} className="matrix-input text-[11px] py-0.5 px-1">
+							<option value="">Seleccionar</option>
+							{lines.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+						</select>
+					</div>
+					<div className="flex flex-col">
+						<label className="font-bold text-matrix-green">Proyecto:</label>
+						<select value={selectedProject} onChange={e => setSelectedProject(e.target.value)} className="matrix-input text-[11px] py-0.5 px-1">
+							<option value="">Seleccionar</option>
+							{projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+						</select>
+					</div>
+					<div className="flex flex-col">
+						<label className="font-bold text-matrix-green">Producto:</label>
+						<select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)} disabled={!selectedProject} className="matrix-input text-[11px] py-0.5 px-1">
+							<option value="">Seleccionar</option>
+							{products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+						</select>
+					</div>
+				</div>
+				<div className="flex flex-wrap gap-2 items-center">
+					<span className="text-matrix-green font-bold text-xs">{currentTime.toLocaleString()}</span>
+					<button className="matrix-btn text-[11px] py-0.5 px-1" onClick={handleLoadChecklist} disabled={!selectedProduct || loadingChecklist}>
+						{loadingChecklist ? 'Cargando...' : 'Cargar Checklist'}
+					</button>
+					<button className="matrix-btn text-[11px] py-0.5 px-1" onClick={handleSaveInspection} disabled={saving || !checklist || inspectionResults.length === 0}>
+						{saving ? 'Guardando...' : 'Registrar Inspección'}
+					</button>
+				</div>
 			</div>
-
-			{/* Layout principal: puntos de inspección y visor */}
-					<div className="inspector-main">
-						{/* Sección izquierda: puntos de inspección */}
-						<div className="inspection-points">
-							<h2>Puntos de Inspección</h2>
-							{inspectionPoints.length === 0 ? (
-								<div className="no-checklist">Seleccione producto y cargue checklist.</div>
-							) : (
-								<>
-									<table className="points-table">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th>Tipo</th>
-												<th>Etiqueta</th>
-												<th>Gravedad</th>
-												<th>Resultado</th>
-												<th>Comentarios</th>
-												<th>Acciones</th>
+				{/* Layout principal: panel izquierdo (puntos) y derecho (visor) en desktop, vertical en mobile */}
+				<div className="flex flex-row md:flex-col flex-1 overflow-hidden">
+					{/* Panel izquierdo: puntos de inspección */}
+					<div className="product-create-panel matrix-widget matrix-border w-1/2 md:w-full h-full md:h-1/2 overflow-y-auto">
+						<h2 className="matrix-title mb-2 text-base font-bold text-matrix-green">Puntos de Inspección</h2>
+						{inspectionPoints.length === 0 ? (
+							<div className="text-matrix-green text-center mt-8">Seleccione producto y cargue checklist.</div>
+						) : (
+							<>
+								<table className="points-table product-create-table mt-1">
+									<thead className="bg-matrix-dark text-matrix-green text-[11px]">
+										<tr>
+											<th className="px-2 py-1">#</th>
+											<th className="px-2 py-1">Tipo</th>
+											<th className="px-2 py-1">Etiqueta</th>
+											<th className="px-2 py-1">Gravedad</th>
+											<th className="px-2 py-1">Resultado</th>
+											<th className="px-2 py-1">Comentarios</th>
+											<th className="px-2 py-1">Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										{inspectionPoints.map((pt, idx) => (
+											<tr key={pt.id || idx} className={selectedPointIdx === idx ? 'selected-row selected' : ''} onClick={() => setSelectedPointIdx(idx)}>
+												<td className="px-0.5 py-0.5">{pt.num}</td>
+												<td className="px-0.5 py-0.5">{pt.type === 'dimensional' ? 'Dimensional' : 'Visual'}</td>
+												<td className="px-0.5 py-0.5">{pt.label}</td>
+												<td className="px-0.5 py-0.5">{pt.severity || '-'}</td>
+																	<td className="px-0.5 py-0.5">
+																		<div className="result-radio-group">
+																			<label><input type="radio" name={`result-${idx}`} value="OK" checked={inspectionResults[idx]?.status === 'OK'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> OK</label>
+																			<label><input type="radio" name={`result-${idx}`} value="NO-OK" checked={inspectionResults[idx]?.status === 'NO-OK'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> NO-OK</label>
+																			<label><input type="radio" name={`result-${idx}`} value="N/A" checked={inspectionResults[idx]?.status === 'N/A'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> N/A</label>
+																		</div>
+																		{/* Campos extra para dimensional */}
+																								{inspectionPoints[idx]?.type === 'dimensional' && (
+																									<>
+																										<div className="dim-fields">
+																											<label>Valor Real:</label>
+																											<input type="text" className="matrix-input w-12 text-[11px] py-0.5 px-1" value={inspectionResults[idx]?.valorReal || ''} onChange={e => handleResultChange(idx, 'valorReal', e.target.value)} />
+																										</div>
+																										<div className="dim-fields mt-1">
+																											<label>Diferencia:</label>
+																											<input type="text" className="matrix-input w-8 text-[11px] py-0.5 px-1 text-center" value={inspectionResults[idx]?.diferencia || ''} onChange={e => handleResultChange(idx, 'diferencia', e.target.value)} />
+																										</div>
+																									</>
+																								)}
+																	</td>
+																	<td className="px-0.5 py-0.5">
+																		<input type="text" className="comment-input" placeholder="Comentarios..." value={inspectionResults[idx]?.comment || ''} onChange={e => handleResultChange(idx, 'comment', e.target.value)} />
+																	</td>
+												<td className="px-0.5 py-0.5">
+													<button className="matrix-btn text-[11px] py-0.5 px-1" onClick={() => handleFocusPoint(idx)}>Enfocar</button>
+												</td>
 											</tr>
-										</thead>
-										<tbody>
-											{inspectionPoints.map((pt, idx) => (
-												<tr key={pt.id || idx} className={selectedPointIdx === idx ? 'selected-row' : ''}>
-													<td>{pt.num}</td>
-													<td>{pt.type === 'dimensional' ? 'Dimensional' : 'Visual'}</td>
-													<td>{pt.label}</td>
-													<td>{pt.severity || '-'}</td>
-																			<td>
-																				<div className="result-radio-group">
-																					<label><input type="radio" name={`result-${idx}`} value="OK" checked={inspectionResults[idx]?.status === 'OK'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> OK</label>
-																					<label><input type="radio" name={`result-${idx}`} value="NO-OK" checked={inspectionResults[idx]?.status === 'NO-OK'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> NO-OK</label>
-																					<label><input type="radio" name={`result-${idx}`} value="N/A" checked={inspectionResults[idx]?.status === 'N/A'} onChange={e => handleResultChange(idx, 'status', e.target.value)} /> N/A</label>
-																				</div>
-																				{/* Campos extra para dimensional */}
-																				{inspectionPoints[idx]?.type === 'dimensional' && (
-																					<div style={{ marginTop: 6 }}>
-																						<label style={{ marginRight: 8 }}>Valor Real:</label>
-																						<input type="text" style={{ width: 60, marginRight: 8 }} value={inspectionResults[idx]?.valorReal || ''} onChange={e => handleResultChange(idx, 'valorReal', e.target.value)} />
-																						<label style={{ marginRight: 8 }}>Diferencia:</label>
-																						<input type="text" style={{ width: 60 }} value={inspectionResults[idx]?.diferencia || ''} onChange={e => handleResultChange(idx, 'diferencia', e.target.value)} />
-																					</div>
-																				)}
-																			</td>
-																			<td>
-																				<input type="text" className="comment-input" placeholder="Comentarios..." value={inspectionResults[idx]?.comment || ''} onChange={e => handleResultChange(idx, 'comment', e.target.value)} />
-																			</td>
-													<td>
-														<button className="btn-focus" onClick={() => handleFocusPoint(idx)}>Enfocar</button>
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
-									<div style={{ marginTop: '1.5rem', textAlign: 'right' }}>
-										<button className="btn-yellow" onClick={handleSaveInspection} disabled={saving}>
-											{saving ? 'Guardando...' : 'Registrar Inspección'}
-										</button>
-									</div>
-								</>
-							)}
-						</div>
-
-						{/* Sección derecha: visor de plano */}
-								<div className="inspection-visor" ref={visorRef}>
-									<h2>Visor</h2>
-									{planoUrl ? (
-										<PlanoKonva src={planoUrl.startsWith('/') ? `http://localhost:5000${planoUrl}` : planoUrl}
+										))}
+									</tbody>
+								</table>
+								<div className="mt-4 text-right">
+									<button className="matrix-btn text-[11px] py-0.5 px-1" onClick={handleSaveInspection} disabled={saving}>
+										{saving ? 'Guardando...' : 'Registrar Inspección'}
+									</button>
+								</div>
+							</>
+						)}
+					</div>
+					{/* Panel derecho: visor de plano */}
+					<div className="matrix-widget matrix-border w-1/2 md:w-full h-full md:h-1/2 flex flex-col items-center justify-center" ref={visorRef}>
+						<h2 className="matrix-title mb-2 text-base font-bold text-matrix-green">Visor</h2>
+								{planoUrl ? (
+									<>
+										<PlanoKonva src={planoUrl.startsWith('/') ? `${api.BASE}${planoUrl}` : planoUrl}
 											focus={selectedPointIdx !== null && inspectionPoints[selectedPointIdx] ? {
 												x: inspectionPoints[selectedPointIdx].x,
 												y: inspectionPoints[selectedPointIdx].y,
 												zoom: inspectionPoints[selectedPointIdx].zoom || 100
 											} : undefined}
 										/>
-									) : (
-										<div className="visor-placeholder">Plano del producto aquí</div>
-									)}
-								</div>
+													<div style={{marginTop: '8px', fontSize: '11px', color: '#0f0', wordBreak: 'break-all'}}>
+														<b>URL plano:</b> {planoUrl.startsWith('/') ? `${api.BASE}${planoUrl}` : planoUrl}<br/>
+														<b>api.BASE:</b> {String(api.BASE)}
+													</div>
+									</>
+								) : (
+									<div className="visor-placeholder text-matrix-green">Plano del producto aquí</div>
+								)}
 					</div>
+				</div>
 		</div>
 	);
 };

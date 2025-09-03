@@ -1,20 +1,127 @@
-.app{ display:flex; height:100vh; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial }
-.sidebar{ width:240px; background:#0b1220; color:#e6eef8; padding:20px; box-shadow:2px 0 8px rgba(2,6,23,0.4) }
-.sidebar h2{ font-size:18px; margin:0 0 12px 0 }
-.sidebar ul{ list-style:none; padding:0; margin:0 }
-.sidebar li{ margin:10px 0 }
-.sidebar a{ color:#98a6b8; text-decoration:none; display:block; padding:8px; border-radius:6px }
-.sidebar a:hover{ background:rgba(255,255,255,0.02); color:#fff }
-.main{ flex:1; padding:28px; overflow:auto; background:linear-gradient(180deg,#f6f8fb, #ffffff) }
-.card{ background:#fff; padding:18px; border-radius:10px; box-shadow:0 8px 20px rgba(15,23,42,0.08) }
-.canvas-placeholder{ width:640px; height:360px; border-radius:8px; border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#fcfdff,#f7fbff) }
-.table{ width:100%; border-collapse:collapse }
-.table th, .table td{ padding:10px; border-bottom:1px solid #f1f5f9; text-align:left }
-.btn{ background:#0f172a; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer }
-.btn.secondary{ background:#f1f5f9; color:#0b1220 }
-.inspector-row{ display:flex; gap:12px; align-items:center; padding:8px 0 }
-.inspector-point{ width:40px; height:40px; border-radius:50%; background:#e6eef8; display:flex; align-items:center; justify-content:center; font-weight:600; color:#0b1220 }
-.point-selected{ box-shadow:0 4px 12px rgba(2,6,23,0.12); transform:translateY(-2px) }
-.toolbar{ display:flex; gap:8px; margin-bottom:12px }
-.flex{ display:flex; gap:12px }
-.muted{ color:#6b7280 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #050d07;
+  color: #00ff41;
+  font-family: 'Share Tech Mono', 'Fira Mono', 'Consolas', monospace;
+  letter-spacing: 0.5px;
+}
+
+.app {
+  min-height: 100vh;
+  background: linear-gradient(180deg,#050d07 80%,#0f0f0f 100%);
+  color: #00ff41;
+  font-family: inherit;
+}
+
+.main {
+  flex: 1;
+  padding: 32px 24px;
+  overflow: auto;
+  background: linear-gradient(180deg,#050d07 60%,#0f0f0f 100%);
+  box-shadow: 0 0 32px #00ff4133;
+  border-radius: 18px;
+  border: 2px solid #00ff41;
+}
+
+.card {
+  background: rgba(0,0,0,0.92);
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px #00ff4133;
+  border: 2px solid #00ff41;
+  color: #00ff41;
+  font-family: inherit;
+  margin-bottom: 24px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0,0,0,0.85);
+  color: #00ff41;
+  font-family: inherit;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px #00ff4133;
+}
+.table th, .table td {
+  padding: 12px;
+  border-bottom: 1px solid #00ff41;
+  text-align: left;
+}
+
+.btn {
+  background: #00ff41;
+  color: #050d07;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  box-shadow: 0 2px 12px #00ff4133;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  text-shadow: 0 0 8px #00ff41;
+}
+.btn.secondary {
+  background: #181818;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+}
+.btn:hover {
+  background: #00e600;
+  color: #fff;
+  box-shadow: 0 0 24px #00ff41;
+}
+
+.inspector-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 10px 0;
+}
+.inspector-point {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #181818;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  box-shadow: 0 0 12px #00ff41;
+}
+.point-selected {
+  box-shadow: 0 4px 16px #00ff41;
+  transform: translateY(-2px);
+}
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.flex {
+  display: flex;
+  gap: 16px;
+}
+.muted {
+  color: #39ff14;
+}
+
+/* Animación Matrix para el fondo (opcional, solo para efecto visual) */
+@keyframes matrix-glow {
+  0% { box-shadow: 0 0 8px #00ff41; }
+  50% { box-shadow: 0 0 32px #00ff41; }
+  100% { box-shadow: 0 0 8px #00ff41; }
+}
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 8px #00ff41);
+  animation: matrix-glow 2s infinite;
+}
+
+/* Eliminar sidebar */
+.sidebar, .sidebar h2, .sidebar ul, .sidebar li, .sidebar a, .sidebar a:hover { display:none !important; }

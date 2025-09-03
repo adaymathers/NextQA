@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import '../ProductCreate.css';
 import { useLocation } from "react-router-dom";
 import * as api from "../api";
 import PlanoKonva from '../components/PlanoKonva';
@@ -317,78 +318,84 @@ export default function ProductCreate() {
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      {/* Panel izquierdo: tabla de puntos de inspección */}
-      <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
-        <h2>Gestión de Producto</h2>
+  <div className="matrix-bg h-screen flex flex-row md:flex-col overflow-hidden text-xs">
+  {/* Panel izquierdo: tabla de puntos de inspección */}
+  <div className="w-1/2 md:w-full h-full md:h-1/2 flex-1 p-1 matrix-widget matrix-border product-create-panel">
+    <div className="product-create-sticky">
+      <h2 className="matrix-title mb-2 text-base font-bold text-matrix-green">Gestión de Producto</h2>
+      <input
+        type="text"
+        placeholder="Nombre del producto"
+        value={productName}
+        onChange={(e) => setProductName(e.target.value)}
+        className="matrix-input w-full mb-1 text-[11px] py-0.5 px-1"
+      />
+      <select
+        value={projectId}
+        onChange={e => setProjectId(e.target.value)}
+        className="matrix-input w-full mb-1 text-[11px] py-0.5 px-1"
+      >
+        <option value="">Selecciona un proyecto</option>
+        {projects.map(project => (
+          <option key={project.id} value={project.id}>
+            {project.client?.name ? `${project.client.name} - ${project.name}` : project.name}
+          </option>
+        ))}
+      </select>
+      <div className="mb-1 flex items-center">
+        <label className="text-matrix-green font-semibold">Plano del producto:</label>
         <input
-          type="text"
-          placeholder="Nombre del producto"
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-          style={{ marginBottom: 8, width: "100%" }}
+          type="file"
+          accept="image/png, image/jpeg"
+          onChange={handleImageUpload}
+          className="ml-2 matrix-input text-[11px] py-0.5 px-1"
+          style={{maxWidth: '120px'}}
         />
-        <select
-          value={projectId}
-          onChange={e => setProjectId(e.target.value)}
-          style={{ marginBottom: 8, width: "100%" }}
-        >
-          <option value="">Selecciona un proyecto</option>
-          {projects.map(project => (
-            <option key={project.id} value={project.id}>
-              {project.client?.name ? `${project.client.name} - ${project.name}` : project.name}
-            </option>
-          ))}
-        </select>
-        <div style={{ marginBottom: 16 }}>
-          <label>Plano del producto:</label>
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={handleImageUpload}
-            style={{ marginLeft: 8 }}
-          />
-        </div>
-        <button onClick={addInspectionPoint}>Agregar punto de inspección</button>
-        <button onClick={handleSave} disabled={saving} style={{ marginLeft: 8 }}>
+      </div>
+      <div className="flex flex-wrap gap-0.5 mb-1">
+        <button onClick={addInspectionPoint} className="matrix-btn text-[11px] py-0.5 px-1">Agregar punto de inspección</button>
+        <button onClick={handleSave} disabled={saving} className="matrix-btn ml-1 text-[11px] py-0.5 px-1">
           {saving ? "Guardando..." : "Guardar producto y checklist"}
         </button>
-        <button onClick={addInspectionPoint}>Agregar punto de inspección</button>
-  <table style={{ width: "100%", marginTop: 16, borderCollapse: "collapse" }}>
-          <thead>
+      </div>
+    </div>
+  <table className="product-create-table mt-1">
+          <thead className="bg-matrix-dark text-matrix-green text-[11px]">
             <tr>
-              <th>#</th>
-              <th>Tipo</th>
-              <th>Dimensión</th>
-              <th>Gravedad</th>
-              <th>Equipo</th>
-              <th>Zoom</th>
-              <th>Acciones</th>
+              <th className="px-2 py-1">#</th>
+              <th className="px-2 py-1">Tipo</th>
+              <th className="px-2 py-1">Dimensión</th>
+              <th className="px-2 py-1">Gravedad</th>
+              <th className="px-2 py-1">Equipo</th>
+              <th className="px-2 py-1">Zoom</th>
+              <th className="px-2 py-1">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {inspectionPoints.map((point, idx) => (
               <tr
                 key={idx}
-                style={selectedPointIdx === idx ? { background: '#e0e7ff', fontWeight: 'bold' } : {}}
+                className={selectedPointIdx === idx ? "selected" : ""}
                 onClick={() => setSelectedPointIdx(idx)}
               >
-                <td>{point.number}</td>
-                <td>
+                <td className="px-0.5 py-0.5">{point.number}</td>
+                <td className="px-0.5 py-0.5">
                   <select
                     value={point.type}
                     onChange={(e) => updateInspectionPoint(idx, "type", e.target.value)}
+                    className="matrix-input text-[11px] py-0.5 px-1"
                   >
                     <option value="visual">Visual</option>
                     <option value="dimensional">Dimensional</option>
                   </select>
                 </td>
-                <td>
+                <td className="px-0.5 py-0.5">
                   {point.type === "dimensional" ? (
-                    <>
+                    <div className="flex flex-wrap gap-0.5 items-center">
                       <select
                         value={point.dimensionType}
                         onChange={(e) => updateInspectionPoint(idx, "dimensionType", e.target.value)}
+                        className="matrix-input text-[11px] py-0.5 px-1"
                       >
                         <option value="longitudinal">Longitudinal</option>
                         <option value="angular">Angular</option>
@@ -398,12 +405,12 @@ export default function ProductCreate() {
                         placeholder="Valor"
                         value={point.valor}
                         onChange={(e) => updateInspectionPoint(idx, "valor", e.target.value)}
-                        style={{ width: 100, marginLeft: 4 }}
+                        className="matrix-input w-12 text-[11px] py-0.5 px-1"
                       />
                       <select
                         value={point.unidad}
                         onChange={(e) => updateInspectionPoint(idx, "unidad", e.target.value)}
-                        style={{ marginLeft: 4 }}
+                        className="matrix-input w-10 text-[11px] py-0.5 px-1"
                       >
                         <option value="mm">mm</option>
                         <option value="cm">cm</option>
@@ -416,23 +423,24 @@ export default function ProductCreate() {
                         placeholder="Tolerancia"
                         value={point.tolerancia}
                         onChange={(e) => updateInspectionPoint(idx, "tolerancia", e.target.value)}
-                        style={{ width: 80, marginLeft: 4 }}
+                        className="matrix-input w-10 text-[11px] py-0.5 px-1"
                       />
-                    </>
+                    </div>
                   ) : (
                     <input
                       type="text"
                       placeholder="Descripción visual"
                       value={point.label || ""}
                       onChange={(e) => updateInspectionPoint(idx, "label", e.target.value)}
-                      style={{ width: 200 }}
+                      className="matrix-input w-24 text-[11px] py-0.5 px-1"
                     />
                   )}
                 </td>
-                <td>
+                <td className="px-0.5 py-0.5">
                   <select
                     value={point.severity}
                     onChange={(e) => updateInspectionPoint(idx, "severity", e.target.value)}
+                    className="matrix-input text-[11px] py-0.5 px-1"
                   >
                     <option value="">Seleccionar</option>
                     <option value="baja">Baja</option>
@@ -440,10 +448,11 @@ export default function ProductCreate() {
                     <option value="alta">Alta</option>
                   </select>
                 </td>
-                <td>
+                <td className="px-0.5 py-0.5">
                   <select
                     value={point.team}
                     onChange={(e) => updateInspectionPoint(idx, "team", e.target.value)}
+                    className="matrix-input text-[11px] py-0.5 px-1"
                   >
                     <option value="">Seleccionar</option>
                     {teams.map((team) => (
@@ -453,42 +462,43 @@ export default function ProductCreate() {
                     ))}
                   </select>
                 </td>
-                <td>
-                  <input
-                    type="number"
-                    min={100}
-                    max={800}
-                    value={point.zoom}
-                    onChange={(e) => updateInspectionPoint(idx, "zoom", Number(e.target.value))}
-                    style={{ width: 60 }}
-                  />
-                  <input
-                    type="number"
-                    min={0}
-                    max={1980}
-                    value={point.x}
-                    onChange={(e) => updateInspectionPoint(idx, "x", Number(e.target.value))}
-                    style={{ width: 60, marginLeft: 4 }}
-                    placeholder="X"
-                  />
-                  <input
-                    type="number"
-                    min={0}
-                    max={1080}
-                    value={point.y}
-                    onChange={(e) => updateInspectionPoint(idx, "y", Number(e.target.value))}
-                    style={{ width: 60, marginLeft: 4 }}
-                    placeholder="Y"
-                  />
-                  <button onClick={() => focusOnPoint(idx)} style={{ marginLeft: 4 }}>
-                    Enfocar
-                  </button>
+                <td className="px-0.5 py-0.5">
+                  <div className="flex flex-wrap gap-0.5 items-center">
+                    <input
+                      type="number"
+                      min={100}
+                      max={800}
+                      value={point.zoom}
+                      onChange={(e) => updateInspectionPoint(idx, "zoom", Number(e.target.value))}
+                      className="matrix-input w-10 text-[11px] py-0.5 px-1"
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      max={1980}
+                      value={point.x}
+                      onChange={(e) => updateInspectionPoint(idx, "x", Number(e.target.value))}
+                      className="matrix-input w-10 text-[11px] py-0.5 px-1"
+                      placeholder="X"
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      max={1080}
+                      value={point.y}
+                      onChange={(e) => updateInspectionPoint(idx, "y", Number(e.target.value))}
+                      className="matrix-input w-10 text-[11px] py-0.5 px-1"
+                      placeholder="Y"
+                    />
+                    <button onClick={() => focusOnPoint(idx)} className="matrix-btn ml-1 text-[11px] py-0.5 px-1">Enfocar</button>
+                  </div>
                 </td>
-                <td>
+                <td className="px-0.5 py-0.5">
                   <button
                     onClick={() =>
                       setInspectionPoints((prev) => prev.filter((_, i) => i !== idx))
                     }
+                    className="matrix-btn bg-red-600 hover:bg-red-800 text-white text-[11px] py-0.5 px-1"
                   >Eliminar</button>
                 </td>
               </tr>
@@ -496,8 +506,8 @@ export default function ProductCreate() {
           </tbody>
         </table>
       </div>
-      {/* Panel derecho: CanvasEditor reemplaza visor plano y controles manuales */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderLeft: "1px solid #ccc", position: "relative" }}>
+  {/* Panel derecho: CanvasEditor reemplaza visor plano y controles manuales */}
+  <div className="w-1/2 md:w-full h-full md:h-1/2 flex-1 flex flex-col items-center justify-center matrix-widget matrix-border" style={{borderLeft: '2px solid #0f0', padding: '4px'}}>
         <PlanoKonva
           src={canvasImage}
           focus={focusKonva}
@@ -513,25 +523,27 @@ export default function ProductCreate() {
       </div>
     {/* PDF y correo */}
     {pdfUrl && (
-      <div style={{ margin: 16 }}>
-        <button
-          onClick={() => {
-            const url = getPdfUrl(pdfUrl);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = url.split('/').pop();
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }}
-          style={{ marginRight: 8 }}
-        >Descargar reporte PDF</button>
-        <button
-          onClick={() => window.open(getPdfUrl(pdfUrl), '_blank')}
-          style={{ marginRight: 8 }}
-        >Ver reporte PDF</button>
-        <div style={{ marginTop: 8 }}>
-          <label>Equipos a notificar:</label>
+      <div className="matrix-widget matrix-border p-4 my-4">
+        <div className="flex flex-wrap gap-2 mb-2">
+          <button
+            onClick={() => {
+              const url = getPdfUrl(pdfUrl);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = url.split('/').pop();
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+            className="matrix-btn"
+          >Descargar reporte PDF</button>
+          <button
+            onClick={() => window.open(getPdfUrl(pdfUrl), '_blank')}
+            className="matrix-btn"
+          >Ver reporte PDF</button>
+        </div>
+        <div className="mt-2 flex items-center">
+          <label className="text-matrix-green font-semibold">Equipos a notificar:</label>
           <select
             multiple
             value={notifyTeams}
@@ -539,7 +551,7 @@ export default function ProductCreate() {
               const options = Array.from(e.target.selectedOptions).map(opt => opt.value);
               setNotifyTeams(options);
             }}
-            style={{ minWidth: 200, marginLeft: 8 }}
+            className="matrix-input ml-2 min-w-[200px]"
           >
             {teams.map(team => (
               <option key={String(team.id)} value={String(team.id)}>
@@ -548,27 +560,29 @@ export default function ProductCreate() {
             ))}
           </select>
         </div>
-        <button
-          style={{ marginLeft: 16, marginTop: 8 }}
-          onClick={() => {
-            // Buscar contexto
-            const currentProject = projects.find(p => p.id === projectId);
-            const cliente = currentProject?.client?.name || "";
-            const proyecto = currentProject?.name || "";
-            const producto = productName;
-            const tipo = "Alta"; // O "Modificación" si se implementa edición
-            // Obtener correos de los equipos seleccionados
-            const selectedTeams = teams.filter(t => notifyTeams.includes(String(t.id)));
-            const emails = selectedTeams.flatMap(t => Array.isArray(t.emails) ? t.emails : []).join(",");
-            const subject = encodeURIComponent(`Notificación: ${tipo} de producto ${producto} | Cliente: ${cliente} | Proyecto: ${proyecto}`);
-            const body = encodeURIComponent(`Se notifica a los equipos seleccionados sobre el alta/modificación del producto.\n\nCliente: ${cliente}\nProyecto: ${proyecto}\nProducto: ${producto}\n\nDescargar PDF: ${pdfUrl}`);
-            window.location.href = `mailto:${emails}?subject=${subject}&body=${body}`;
-          }}
-        >Enviar por correo</button>
-        <button
-          style={{ marginLeft: 16, marginTop: 8, background: '#f87171', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 4 }}
-          onClick={() => setPdfUrl("")}
-        >Cerrar sección PDF</button>
+        <div className="flex flex-wrap gap-2 mt-4">
+          <button
+            className="matrix-btn"
+            onClick={() => {
+              // Buscar contexto
+              const currentProject = projects.find(p => p.id === projectId);
+              const cliente = currentProject?.client?.name || "";
+              const proyecto = currentProject?.name || "";
+              const producto = productName;
+              const tipo = "Alta"; // O "Modificación" si se implementa edición
+              // Obtener correos de los equipos seleccionados
+              const selectedTeams = teams.filter(t => notifyTeams.includes(String(t.id)));
+              const emails = selectedTeams.flatMap(t => Array.isArray(t.emails) ? t.emails : []).join(",");
+              const subject = encodeURIComponent(`Notificación: ${tipo} de producto ${producto} | Cliente: ${cliente} | Proyecto: ${proyecto}`);
+              const body = encodeURIComponent(`Se notifica a los equipos seleccionados sobre el alta/modificación del producto.\n\nCliente: ${cliente}\nProyecto: ${proyecto}\nProducto: ${producto}\n\nDescargar PDF: ${pdfUrl}`);
+              window.location.href = `mailto:${emails}?subject=${subject}&body=${body}`;
+            }}
+          >Enviar por correo</button>
+          <button
+            className="matrix-btn bg-red-600 hover:bg-red-800 text-white"
+            onClick={() => setPdfUrl("")}
+          >Cerrar sección PDF</button>
+        </div>
       </div>
     )}
     </div>
