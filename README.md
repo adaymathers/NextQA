@@ -1,6 +1,18 @@
-# NextQA
-Plataforma multiusuario para control de calidad industrial. Gestión de clientes, proyectos, productos, checklists, reportes PDF y métricas KPI en tiempo real.
-
+🚀 Presento “NextQA”, un software de control de calidad industrial desarrollado completamente desde cero por mí.
+🔍 Funciones principales:
+Multiusuario: pensado para equipos QA y administrativos en empresas medianas y grandes.
+Gestión completa de clientes, proyectos, productos y procesos.
+Creación y edición de checklist de inspección, con criterios visuales y dimensionales.
+Visualización de planos interactivos (canvas), zoom automático y navegación por puntos de inspección.
+Generación automática de reportes PDF y almacenamiento en base de datos para métricas y consulta histórica.
+Notificaciones automáticas por correo ante defectos críticos, con listas de destinatarios editables.
+Panel gerencial con métricas KPI, gráficas de defectos y control estadístico de procesos.
+Chat global integrado para comunicación interna, evitando el uso de WhatsApp en el trabajo.
+Interfaz moderna, compacta y responsiva, optimizada para Desktop y Tablets.
+💡 Todo el desarrollo, desde el backend (Node.js + Prisma) hasta el frontend (React + Vite), lo he realizado personalmente, priorizando usabilidad y funcionalidad completa para usuarios no técnicos.
+🎯 Mi objetivo es incorporarme a una empresa donde pueda aportar mi experiencia, continuar el desarrollo e implementación de NextQA, y seguir creciendo profesionalmente en el área de software industrial.
+Si te interesa conocer más, colaborar o tienes una oportunidad laboral, ¡contáctame!
+#NextQA #QA #Software #React #NodeJS #Inspección #Desarrollo #LinkedIn
 
 我正在向您介紹“NextQA”，這是一款完全由我獨立開發的工業品質控制軟體。
 
